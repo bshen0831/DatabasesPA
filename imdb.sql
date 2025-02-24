@@ -1,5 +1,5 @@
 /*
-
+The SQL code to create the tables for the databases
 DROP DATABASE IF EXISTS moviedb;
 CREATE DATABASE moviedb;
 USE moviedb;
