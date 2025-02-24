@@ -42,11 +42,14 @@ def like_movie():
     #    - How `execute` handles SQL queries.
     #    - Why we pass `params` as a tuple (movie_id, user_email).
     #    - The role of `commit=True` in saving changes.
-
-    query = """ """
+    
+    query = """
+    INSERT IGNORE INTO Likes (mpid, uemail) VALUES (%s, %s);
+    """
 
     with Database() as db:
         try:
+            db.execute("INSERT IGNORE INTO Users (email, NAME, age) VALUES (%s, NULL, NULL);", user_email, commit=True)
             db.execute(query, (movie_id, user_email), commit=True)
             message = "You have successfully liked the movie!"
         except Exception as e:
