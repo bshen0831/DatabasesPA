@@ -61,7 +61,7 @@ CREATE TABLE moviedb.Role(
     mpid INT NOT NULL,
     pid INT NOT NULL,
     role_name VARCHAR(255) NOT NULL,
-    PRIMARY KEY (mpid, pid),
+    PRIMARY KEY (mpid, pid, role_name),
     FOREIGN KEY (mpid) REFERENCES moviedb.MotionPicture(id),
     FOREIGN KEY (pid) REFERENCES moviedb.People(id)
 );
@@ -72,7 +72,7 @@ CREATE TABLE moviedb.Award(
     pid INT NOT NULL,
     award_name VARCHAR(255) NOT NULL,
     award_year INT NOT NULL,
-    PRIMARY KEY (id, pid, award_name, award_year),
+    PRIMARY KEY (mpid, pid, award_name, award_year),
     FOREIGN KEY (mpid) REFERENCES moviedb.MotionPicture(id),
     FOREIGN KEY (pid) REFERENCES moviedb.People(id)
 );
