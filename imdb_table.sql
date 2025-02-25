@@ -7,8 +7,8 @@ USE moviedb;
 DROP TABLE IF EXISTS moviedb.MotionPicture;
 CREATE TABLE moviedb.MotionPicture (
   id INT NOT NULL,
-  NAME VARCHAR(255),
-  genre VARCHAR(255),
+  NAME VARCHAR(255) NOT NULL,
+  genre VARCHAR(255) NOT NULL,
   rating FLOAT CHECK (rating >= 0 AND rating <= 10),
   production VARCHAR(255),
   budget INT CHECK (budget > 0),
@@ -17,15 +17,15 @@ CREATE TABLE moviedb.MotionPicture (
 DROP TABLE IF Exists moviedb.Movie;
 CREATE TABLE moviedb.Movie(
     mpid INT NOT NULL,
-    boxoffice_collection FLOAT CHECK (boxoffice_collection >= 0),
+    boxoffice_collection FLOAT CHECK (boxoffice_collection >= 0) NOT NULL,
     PRIMARY KEY (mpid),
-    FOREIGN KEY (mpid) REFERENCES moviedb.MotionPicture(id)  ON DELETE CASCADE
+    FOREIGN KEY (mpid) REFERENCES moviedb.MotionPicture(id) ON DELETE CASCADE
 );
 
 DROP TABLE IF Exists moviedb.Series;
 CREATE TABLE moviedb.Series(
     mpid INT NOT NULL,
-    season_count INT CHECK (season_count >= 1),
+    season_count INT CHECK (season_count >= 1) NOT NULL,
     PRIMARY KEY (mpid),
     FOREIGN KEY (mpid) REFERENCES moviedb.MotionPicture(id) ON DELETE CASCADE
 );
