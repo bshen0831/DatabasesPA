@@ -11,7 +11,7 @@ CREATE TABLE moviedb.MotionPicture (
   genre VARCHAR(255) NOT NULL,
   rating FLOAT CHECK (rating >= 0 AND rating <= 10),
   production VARCHAR(255),
-  budget INT CHECK (budget > 0),
+  budget BIGINT CHECK (budget > 0),
   PRIMARY KEY (id));
 
 DROP TABLE IF Exists moviedb.Movie;
