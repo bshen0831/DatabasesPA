@@ -30,7 +30,7 @@ def search_movie():
     WHERE name= %s; """
     
     with Database() as db:
-        movies = db.execute(query, (f"%{movie_name}%",))
+        movies = db.execute(query, movie_name)
     return render_template("search_results.html", movies=movies)
 
 
@@ -43,11 +43,11 @@ def search_liked_movies():
     #              List the movie `name`, `rating`, `production` and `budget`.
 
     query = """ SELECT m.name, m.rating, m.production, m.budget
-    FROM MotionPicture m JOIN likes l ON m.mpid = l.mpid
+    FROM MotionPicture m JOIN likes l ON m.id = l.mpid
     WHERE l.uemail = %s; """
 
     with Database() as db:
-        movies = db.execute(query, (user_email,))
+        movies = db.execute(query, user_email)
     return render_template("search_results.html", movies=movies)
 
 
@@ -60,7 +60,7 @@ def search_by_country():
     #              List only the motion picture names without any duplicates.
 
     query = """SELECT DISTINCT m.name
-     FROM MotionPicture m JOIN Location l on m.mpid = l.mpid
+     FROM MotionPicture m JOIN Location l on m.id = l.mpid
       WHERE l.country = %s; """
 
     with Database() as db:
@@ -76,13 +76,19 @@ def search_directors_by_zip():
     # >>>> TODO 5: List all directors who have directed TV series shot in a specific zip code. <<<<
     #              List the director name and TV series name only without duplicates.
 
-    query = """ SELECT DISTINCT r.name, DISTINCT s.name
-    FROM Role r JOIN Series s on r.mpid=s.mpid
-    JOIN Location l on s.mpid = l.mpid
-    WHERE l.zip = %s;"""
+    query = """ 
+SELECT DISTINCT P.name, m.name AS 'TV Series'
+FROM People P 
+	JOIN Role R ON P.id = R.pid 
+	JOIN Series S ON S.mpid = R.mpid
+	JOIN MotionPicture M ON M.id = S.mpid
+	
+WHERE R.role_name = 'Director' AND M.id IN (SELECT mpid
+		FROM Location
+		WHERE zip = %s);"""
 
     with Database() as db:
-        results = db.execute(query, (zip_code,))
+        results = db.execute(query, (zip_code))
     return render_template("search_directors_results.html", results=results)
 
 
@@ -101,7 +107,7 @@ def search_awards():
     HAVING COUNT(a.aid) > %s; """
 
     with Database() as db:
-        results = db.execute(query, (k,))
+        results = db.execute(query, (k))
     return render_template("search_awards_results.html", results=results)
 
 
