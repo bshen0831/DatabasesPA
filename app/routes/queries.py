@@ -259,7 +259,12 @@ def actors_marvel_warner():
 
     query = """SELECT p.name as 'actor names', mp.name as 'motion picture names'
 FROM people p JOIN role r ON (r.pid = p.id AND role_name = 'Actor') 
-JOIN motionpicture mp ON (r.mpid = mp.id AND (production = 'Marvel' OR 'Warner Bros'));
+JOIN motionpicture mp ON (r.mpid = mp.id AND (production = 'Marvel'))
+WHERE p.id IN (
+SELECT p.id
+FROM people p JOIN role r ON (r.pid = p.id AND role_name = 'Actor') 
+JOIN motionpicture mp ON (r.mpid = mp.id AND (production = 'Warner Bros'))
+);
  """
 
     with Database() as db:
