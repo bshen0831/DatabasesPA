@@ -257,14 +257,20 @@ def actors_marvel_warner():
     # >>>> TODO 12: Find the actors who have played a role in both “Marvel” and “Warner Bros” productions. <<<<
     #               List the `actor names` and the corresponding `motion picture names`.
 
-    query = """SELECT p.name as 'actor names', mp.name as 'motion picture names'
+    query = """SELECT p.name as 'actor names', mp.name as 'motion picture names', mp.production
 FROM people p JOIN role r ON (r.pid = p.id AND role_name = 'Actor') 
-JOIN motionpicture mp ON (r.mpid = mp.id AND (production = 'Marvel'))
+JOIN motionpicture mp ON (r.mpid = mp.id)
+
 WHERE p.id IN (
 SELECT p.id
-FROM people p JOIN role r ON (r.pid = p.id AND role_name = 'Actor') 
-JOIN motionpicture mp ON (r.mpid = mp.id AND (production = 'Warner Bros'))
-);
+FROM people p JOIN role r ON (r.pid = p.id)
+JOIN motionpicture mp ON (r.mpid = mp.id AND production = 'Marvel')
+WHERE p.id IN (
+SELECT p.id
+FROM people p JOIN role r ON (r.pid = p.id)
+JOIN motionpicture mp ON (r.mpid = mp.id AND production = 'Warner Bros'))
+)
+
  """
 
     with Database() as db:
