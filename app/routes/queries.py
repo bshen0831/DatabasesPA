@@ -213,9 +213,11 @@ def top_thriller_movies_boston():
     query = """ SELECT mp.name, mp.rating 
    FROM MotionPicture mp JOIN Movie m on mp.id = m.mpid
     JOIN Location l on m.mpid = l.mpid
-    JOIN Genre G ON m.mpid = g.mpid AND genre_name = 'Thriller'
-    WHERE l.city = 'Boston' 
-     GROUP BY mp.rating
+    JOIN Genre G ON m.mpid = g.mpid AND g.genre_name = 'Thriller'
+    GROUP BY mp.id
+    HAVING MAX(l.city)='Boston' and COUNT(DISTINCT l.city)=1 
+    Order BY mp.rating DESC
+    LIMIT 2;
      """
 
     with Database() as db:
